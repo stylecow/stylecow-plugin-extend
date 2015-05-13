@@ -1,0 +1,11 @@
+%display-block {
+	display: block;
+}
+
+%unused {
+	color: yellow;
+}
+
+.is-block {
+	@extend %display-block;
+}

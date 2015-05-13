@@ -1,0 +1,20 @@
+%display-block {
+	display: block;
+}
+
+%display-block > p {
+	color: yellow;
+}
+
+div %display-block > p {
+	color: orange
+}
+
+.is-block {
+	@extend %display-block;
+}
+
+.is-red-block {
+	@extend %display-block;
+	color: red;
+}

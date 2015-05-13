@@ -1,0 +1,12 @@
+%display-block {
+	display: block;
+}
+
+.is-block {
+	@extend %display-block;
+}
+
+.is-red-block {
+	@extend %display-block;
+	color: red;
+}
