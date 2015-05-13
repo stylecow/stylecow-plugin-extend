@@ -64,6 +64,29 @@
           "children": []
         }
       ]
+    },
+    {
+      "class": "Rule",
+      "children": [
+        {
+          "class": "Selectors",
+          "children": [
+            {
+              "class": "Selector",
+              "children": [
+                {
+                  "class": "ClassSelector",
+                  "name": "is-inline"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "Block",
+          "children": []
+        }
+      ]
     }
   ]
 }

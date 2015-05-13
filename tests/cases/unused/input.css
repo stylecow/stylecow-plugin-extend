@@ -9,3 +9,7 @@
 .is-block {
 	@extend %display-block;
 }
+
+.is-inline {
+	@extend %display-inline;
+}

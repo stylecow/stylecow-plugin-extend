@@ -11,39 +11,7 @@ module.exports = function (stylecow) {
 			var selector = extend.get('Selector');
 
 			if (rule && selector) {
-				var placeholder = selector.get('PlaceholderSelector');
-
-				//Search for references
-				var selectorsRef = selector
-					.getParent('Root')
-					.getAll(function () {
-						if (this.type !== 'Selector' || this.parent.parent.type !== 'Rule') {
-							return false;
-						}
-
-						return this.hasChild({
-							type: 'PlaceholderSelector',
-							name: placeholder.name
-						});
-					});
-
-				//Add the new selector to the reference
-				rule.getChild('Selectors')
-					.getChildren('Selector')
-					.forEach(function (selector) {
-						selectorsRef.forEach(function (selectorRef) {
-							var place = selectorRef
-								.cloneBefore()
-								.get('PlaceholderSelector');
-
-							selector.forEach(function (child) {
-								place.before(child.clone());
-							})
-
-							place.detach();
-						});
-					});
-
+				resolvePlaceholders(rule, selector);
 				extend.detach();
 			}
 		}
@@ -74,4 +42,46 @@ module.exports = function (stylecow) {
 				});
 		}
 	});
+
+	function resolvePlaceholders (rule, selector) {
+		var placeholder = selector.get('PlaceholderSelector');
+
+		if (!placeholder) {
+			return false;
+		}
+
+		//Search for references
+		var selectorsRef = selector
+			.getParent('Root')
+			.getAll(function () {
+				if (this.type !== 'Selector' || this.parent.parent.type !== 'Rule') {
+					return false;
+				}
+
+				return this.hasChild({
+					type: 'PlaceholderSelector',
+					name: placeholder.name
+				});
+			});
+
+		//Add the new selector to the reference
+		rule.getChild('Selectors')
+			.getChildren('Selector')
+			.forEach(function (selector) {
+				selectorsRef.forEach(function (selectorRef) {
+					var place = selectorRef
+						.cloneBefore()
+						.get({
+							type: 'PlaceholderSelector',
+							name: placeholder.name
+						});
+
+					selector.forEach(function (child) {
+						place.before(child.clone());
+					})
+
+					place.detach();
+				});
+			});
+	}
 };
