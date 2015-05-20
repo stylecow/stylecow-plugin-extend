@@ -1,0 +1,13 @@
+%button, %button > a, p > %button {
+	display: inline-block;
+	color: blue;
+}
+
+.button {
+	@extend %button;
+}
+
+.button-2, .button-3 {
+	@extend %button;
+	color: red;
+}

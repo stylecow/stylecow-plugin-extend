@@ -1,87 +1,117 @@
 module.exports = function (stylecow) {
 
-	//Search for @extend
-	stylecow.addTask({
-		filter: {
-			type: 'AtRule',
-			name: 'extend'
-		},
-		fn: function (extend) {
-			var rule = extend.getParent('Rule');
-			var selector = extend.get('Selector');
+	var index;
 
-			if (rule && selector) {
-				resolvePlaceholders(rule, selector);
-				extend.detach();
-			}
+	//Init the index of placeholders
+	stylecow.addTask({
+		fn: function (root) {
+			index = {};
 		}
 	});
 
-	//Remove empty placeholders
+	//Search for placeholders and save them in the index
+	stylecow.addTask({
+		filter: {
+			type: 'PlaceholderSelector'
+		},
+		fn: function (placeholder) {
+			var type = 'defs';
+
+			if (placeholder.getParent({
+				type: 'AtRule',
+				name: 'extend'
+			})) {
+				type = 'uses';
+			}
+
+			if (!index[placeholder.name]) {
+				index[placeholder.name] = {
+					defs: [],
+					uses: []
+				};
+			}
+
+			index[placeholder.name][type].push(placeholder);
+		}
+	});
+
+	//Resolve all placeholders
 	stylecow.addTask({
 		filter: {
 			type: 'Root'
 		},
 		fn: function (root) {
-			root
-				.getAll('Rule')
-				.forEach(function (rule) {
-					var selectors = rule.getChild('Selectors');
+			var name, each;
 
-					selectors
-						.getChildren()
-						.forEach(function (selector) {
-							if (selector.has('PlaceholderSelector')) {
-								selector.detach();
-							}
-						});
+			for (name in index) {
+				var each = index[name];
+				var d = 0;
+				var u = 0;
+				var dt = each.defs.length;
+				var ut = each.uses.length;
 
-					if (!selectors.length) {
-						rule.detach();
+				//Resolve
+				if (ut && dt) {
+					for (d = 0; d < dt; d++) {
+						for (u = 0; u < ut; u++) {
+							resolve(each.defs[d], each.uses[u]);
+						}
 					}
-				});
+				}
+
+				for (d = 0; d < dt; d++) {
+					removeDefined(each.defs[d]);
+				}
+
+				for (u = 0; u < ut; u++) {
+					removeUsed(each.uses[u]);
+				}
+			}
 		}
 	});
 
-	function resolvePlaceholders (rule, selector) {
-		var placeholder = selector.get('PlaceholderSelector');
+	function removeUsed (used) {
+		var atrule = used.getParent({
+			type: 'AtRule',
+			name: 'extend'
+		});
 
-		if (!placeholder) {
-			return false;
+		if (atrule) {
+			atrule.detach();
 		}
+	}
 
-		//Search for references
-		var selectorsRef = selector
-			.getParent('Root')
-			.getAll(function () {
-				if (this.type !== 'Selector' || this.parent.parent.type !== 'Rule') {
-					return false;
-				}
+	function removeDefined (defined) {
+		var selector = defined.getParent('Selector');
 
-				return this.hasChild({
+		if (selector) {
+			var selectors = selector.getParent();
+
+			selector.detach();
+
+			if (!selectors.length) {
+				selectors.getParent().detach();
+			}
+		}
+	}
+
+	function resolve (def, use) {
+		var defSelector = def.getParent('Selector');
+		var useSelectors = use.getParent('Rule').getChild('Selectors');
+
+		useSelectors.forEach(function (useSelector) {
+			var placeholder = defSelector
+				.cloneBefore()
+				.get({
 					type: 'PlaceholderSelector',
-					name: placeholder.name
+					name: def.name
 				});
+
+			useSelector.forEach(function (child) {
+				placeholder.before(child.clone());
 			});
 
-		//Add the new selector to the reference
-		rule.getChild('Selectors')
-			.getChildren('Selector')
-			.forEach(function (selector) {
-				selectorsRef.forEach(function (selectorRef) {
-					var place = selectorRef
-						.cloneBefore()
-						.get({
-							type: 'PlaceholderSelector',
-							name: placeholder.name
-						});
-
-					selector.forEach(function (child) {
-						place.before(child.clone());
-					})
-
-					place.detach();
-				});
-			});
+			placeholder.detach();
+		});
 	}
 };

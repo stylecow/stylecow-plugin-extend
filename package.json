@@ -1,20 +1,21 @@
 {
-	"name": "stylecow-plugin-extend",
-	"description": "Stylecow plugin to work with @extend at-rules",
-	"version": "1.0.0",
-	"author": "Oscar Otero <oom@oscarotero.com>",
-	"homepage": "https://github.com/stylecow/stylecow-plugin-extend",
-	"bugs": "https://github.com/stylecow/stylecow-plugin-extend/issues",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/stylecow/stylecow-plugin-extend.git"
-	},
-	"devDependencies": {
-		"stylecow": "6.*"
-	},
-	"scripts": {
-		"test": "mocha tests/cases.js"
-	},
-	"main": "index.js",
-	"license": "MIT"
+  "name": "stylecow-plugin-extend",
+  "description": "Stylecow plugin to work with @extend at-rules",
+  "version": "1.0.1",
+  "author": "Oscar Otero <oom@oscarotero.com>",
+  "homepage": "https://github.com/stylecow/stylecow-plugin-extend",
+  "bugs": "https://github.com/stylecow/stylecow-plugin-extend/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stylecow/stylecow-plugin-extend.git"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "stylecow": "6.*"
+  },
+  "scripts": {
+    "test": "mocha tests/cases.js"
+  },
+  "main": "index.js",
+  "license": "MIT"
 }

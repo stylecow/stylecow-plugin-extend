@@ -1,0 +1,10 @@
+.button, .button-2, .button-3, .button > a, .button-2 > a, .button-3 > a, p > .button, p > .button-2, p > .button-3 {
+	display: inline-block;
+	color: blue;
+}
+.button {
+	
+}
+.button-2, .button-3 {
+	color: red;
+}
