@@ -1,7 +1,7 @@
 {
   "name": "stylecow-plugin-extend",
   "description": "Stylecow plugin to work with @extend at-rules",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Oscar Otero <oom@oscarotero.com>",
   "homepage": "https://github.com/stylecow/stylecow-plugin-extend",
   "bugs": "https://github.com/stylecow/stylecow-plugin-extend/issues",
