@@ -7,9 +7,6 @@
 div .is-block > p, div .is-red-block > p {
 	color: orange;
 }
-.is-block {
-	
-}
 .is-red-block {
 	color: red;
 }

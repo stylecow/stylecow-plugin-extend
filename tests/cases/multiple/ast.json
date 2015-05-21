@@ -190,29 +190,6 @@
               "children": [
                 {
                   "class": "ClassSelector",
-                  "name": "button"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "class": "Block",
-          "children": []
-        }
-      ]
-    },
-    {
-      "class": "Rule",
-      "children": [
-        {
-          "class": "Selectors",
-          "children": [
-            {
-              "class": "Selector",
-              "children": [
-                {
-                  "class": "ClassSelector",
                   "name": "button-2"
                 }
               ]

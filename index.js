@@ -1,46 +1,39 @@
 module.exports = function (stylecow) {
 
-	var index;
-
-	//Init the index of placeholders
-	stylecow.addTask({
-		fn: function (root) {
-			index = {};
-		}
-	});
-
-	//Search for placeholders and save them in the index
-	stylecow.addTask({
-		filter: {
-			type: 'PlaceholderSelector'
-		},
-		fn: function (placeholder) {
-			var type = 'defs';
-
-			if (placeholder.getParent({
-				type: 'AtRule',
-				name: 'extend'
-			})) {
-				type = 'uses';
-			}
-
-			if (!index[placeholder.name]) {
-				index[placeholder.name] = {
-					defs: [],
-					uses: []
-				};
-			}
-
-			index[placeholder.name][type].push(placeholder);
-		}
-	});
-
 	//Resolve all placeholders
 	stylecow.addTask({
 		filter: {
 			type: 'Root'
 		},
 		fn: function (root) {
+			//Save all placeholderselectors
+			var index = {};
+
+			root
+				.getAll({
+					type: 'PlaceholderSelector'
+				})
+				.forEach(function (placeholder) {
+					var type = 'defs';
+
+					if (placeholder.getParent({
+						type: 'AtRule',
+						name: 'extend'
+					})) {
+						type = 'uses';
+					}
+
+					if (!index[placeholder.name]) {
+						index[placeholder.name] = {
+							defs: [],
+							uses: []
+						};
+					}
+
+					index[placeholder.name][type].push(placeholder);
+				});
+
+			//Resolve
 			var name, each;
 
 			for (name in index) {
@@ -76,8 +69,15 @@ module.exports = function (stylecow) {
 			name: 'extend'
 		});
 
+		var block = atrule.getParent('Block');
+
 		if (atrule) {
 			atrule.detach();
+		}
+
+		//remove if it's empty
+		if (!block.length) {
+			block.getParent().detach();
 		}
 	}
 
@@ -97,7 +97,8 @@ module.exports = function (stylecow) {
 
 	function resolve (def, use) {
 		var defSelector = def.getParent('Selector');
-		var useSelectors = use.getParent('Rule').getChild('Selectors');
+		var useRule = use.getParent('Rule');
+		var useSelectors = useRule.getChild('Selectors');
 
 		useSelectors.forEach(function (useSelector) {
 			var placeholder = defSelector

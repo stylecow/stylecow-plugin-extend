@@ -62,29 +62,6 @@
               "children": [
                 {
                   "class": "ClassSelector",
-                  "name": "is-block"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "class": "Block",
-          "children": []
-        }
-      ]
-    },
-    {
-      "class": "Rule",
-      "children": [
-        {
-          "class": "Selectors",
-          "children": [
-            {
-              "class": "Selector",
-              "children": [
-                {
-                  "class": "ClassSelector",
                   "name": "is-red-block"
                 }
               ]
