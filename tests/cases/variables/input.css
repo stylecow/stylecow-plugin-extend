@@ -1,5 +1,4 @@
-%button, %button > a, p > %button {
-	display: inline-block;
+%button {
 	color: var(--color, blue);
 }
 
@@ -7,8 +6,7 @@
 	@extend %button;
 }
 
-.button-2, .button-3 {
+.button-2 {
 	--color: red;
 	@extend %button;
-	color: var(--color);
 }

@@ -1,85 +1,95 @@
 module.exports = function (stylecow) {
+	var index = {};
+
+	stylecow.addTask({
+		fn: function () {
+			index = {};
+		}
+	});
 
 	//Resolve placeholders that need to be duplicated (with variables)
 	stylecow.addTask({
-		fn: function (root) {
-			//Save all placeholderselectors
-			var index = {};
+		filter: {
+			type: 'PlaceholderSelector'
+		},
+		fn: function (placeholder) {
+			var type = 'defs';
 
-			root
-				.getAll({
-					type: 'PlaceholderSelector'
-				})
-				.forEach(function (placeholder) {
-					var type = 'defs';
+			if (placeholder.getParent({
+				type: 'AtRule',
+				name: 'extend'
+			})) {
+				type = 'uses';
+			}
 
-					if (placeholder.getParent({
-						type: 'AtRule',
-						name: 'extend'
-					})) {
-						type = 'uses';
+			//If it's a definition, save it to use later
+			if (type === 'defs') {
+				var rule = placeholder.getParent('Rule');
+
+				if (rule.data.extend_executed === true) {
+					return;
+				}
+
+				rule.data.extend_executed = true;
+
+				if (rule.has('ExtensionName')) {
+					if (!(placeholder.name in index)) {
+						index[placeholder.name] = [];
 					}
 
-					if (!index[placeholder.name]) {
-						index[placeholder.name] = {
-							defs: [],
-							uses: [],
-							vars: []
-						};
+					index[placeholder.name].push(rule.clone(true));
+				}
+
+				return;
+			}
+
+			//Use the definitions
+			if (placeholder.name in index) {
+				var useRule = placeholder.getParent('Rule');
+
+				index[placeholder.name].forEach(function (defRule) {
+					var hasDeclaredVariables = false;
+					var declaredVariables = defRule
+							.getAll('ExtensionName')
+							.map(function (extension) {
+								var variable = placeholder.getData('@var-' + extension.name);
+
+								if (variable) {
+									variable = variable.clone();
+									hasDeclaredVariables = true;
+									return variable.clone();
+								}
+							});
+
+					if (!hasDeclaredVariables) {
+						return;
 					}
 
-					if (type === 'defs') {
-						var rule = placeholder.getParent('Rule');
-						var hasVars = false;
+					var defRuleCopy = defRule.clone();
 
-						rule.getAll('ExtensionName').forEach(function (extension) {
-							hasVars = true;
+					//Save variables
+					declaredVariables.forEach(function (declaration) {
+						if (declaration) {
+							defRuleCopy.setData('@var-' + declaration.name.substr(2), declaration);
+						}
+					});
 
-							if (index[placeholder.name].vars.indexOf(extension.name) === -1) {
-								index[placeholder.name].vars.push(extension.name);
-							}
+					useRule.before(defRuleCopy);
+
+					defRuleCopy
+						.getChild('Selectors')
+						.getAll({
+							type: 'PlaceholderSelector',
+							name: placeholder.name
+						})
+						.forEach(function (place) {
+							resolve(place, placeholder);
+							removeDefined(place);
 						});
 
-						if (hasVars) {
-							index[placeholder.name][type].push(rule);
-						}
-
-					} else {
-						index[placeholder.name][type].push(placeholder);
-					}
+					removeUsed(placeholder);
 				});
-
-			console.log(index);
-
-			/*
-			//Resolve
-			var name, each;
-
-			for (name in index) {
-				var each = index[name];
-				var d = 0;
-				var u = 0;
-				var dt = each.defs.length;
-				var ut = each.uses.length;
-
-				//Resolve
-				if (ut && dt) {
-					for (d = 0; d < dt; d++) {
-						for (u = 0; u < ut; u++) {
-							resolve(each.defs[d], each.uses[u]);
-						}
-					}
-				}
-
-				for (d = 0; d < dt; d++) {
-					removeDefined(each.defs[d]);
-				}
-
-				for (u = 0; u < ut; u++) {
-					removeUsed(each.uses[u]);
-				}
 			}
-			*/
 		}
 	});
 

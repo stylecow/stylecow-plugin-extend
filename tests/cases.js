@@ -3,6 +3,7 @@ var stylecow = require('stylecow');
 
 stylecow
 	.loadNpmModule(__dirname + '/../index')
+	.loadPlugin('variables')
 	.minSupport({
 		"explorer": 0,
 		"firefox": 0,
