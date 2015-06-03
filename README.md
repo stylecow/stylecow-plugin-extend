@@ -3,45 +3,54 @@
 Stylecow plugin to work with @extend using the [syntax proposed by Tab Atkins](http://tabatkins.github.io/specs/css-extend-rule/#placeholder-selector).
 
 ```css
-%display-block {
-	display: block;
+%button {
+	display: inline-block;
+	padding: 1em;
 }
 
-%display-block > p {
-	color: yellow;
+%big-button {
+	@extend %button;
+	font-size: 2em;
 }
 
-div %display-block > p {
-	color: orange
-}
-
-.is-block {
-	@extend %display-block;
-}
-
-.is-red-block {
-	@extend %display-block;
+%red-big-button {
+	@extend %big-button;
 	color: red;
+}
+
+.button {
+	@extend %button;
+}
+
+.big-button {
+	@extend %big-button;
+}
+
+.red-big-button {
+	@extend %red-big-button;
+}
+
+.red-big-button-rounded {
+	@extend %red-big-button;
+	border-radius: 8px;
 }
 ```
 
 And stylecow converts to:
 
 ```css
-.is-block, .is-red-block {
-	display: block;
+.red-big-button, .red-big-button-rounded, .big-button, .button {
+	display: inline-block;
+	padding: 1em;
 }
-.is-block > p, .is-red-block > p {
-	color: yellow;
+.red-big-button, .red-big-button-rounded, .big-button {
+	font-size: 2em;
 }
-div .is-block > p, div .is-red-block > p {
-	color: orange;
-}
-.is-block {
-	
-}
-.is-red-block {
+.red-big-button, .red-big-button-rounded {
 	color: red;
+}
+.red-big-button-rounded {
+	border-radius: 8px;
 }
 ```
 
