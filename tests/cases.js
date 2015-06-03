@@ -28,12 +28,4 @@ stylecow
 				assert.deepEqual(test.css.toAst(), test.readJson('ast.json'));
 			});
 		});
-	}, [
-		'extended-extend',
-		'basic',
-		'multiple-extend',
-		'multiple-selectors',
-		'selectors',
-		'unused',
-		'variables',
-	]);
+	});
