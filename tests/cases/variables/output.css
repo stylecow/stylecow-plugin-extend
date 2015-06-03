@@ -1,0 +1,11 @@
+.button, .button-3 {
+	color: blue;
+	background: white;
+}
+.button-2 {
+	color: red;
+	background: black;
+}
+.button-3 {
+	font-family: Arial;
+}

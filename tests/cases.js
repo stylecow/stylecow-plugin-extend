@@ -15,8 +15,7 @@ stylecow
 	})
 	.testCases(__dirname + '/cases', function (test) {
 		stylecow.run(test.css);
-		console.log(test.css.toString());
-		return;
+
 
 		describe('cases/' + test.name, function() {
 			it('should match output.css', function() {
@@ -29,4 +28,12 @@ stylecow
 				assert.deepEqual(test.css.toAst(), test.readJson('ast.json'));
 			});
 		});
-	}, ['variables']);
+	}, [
+		'extended-extend',
+		'basic',
+		'multiple-extend',
+		'multiple-selectors',
+		'selectors',
+		'unused',
+		'variables',
+	]);

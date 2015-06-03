@@ -1,0 +1,31 @@
+%button {
+	display: inline-block;
+	padding: 1em;
+}
+
+%big-button {
+	@extend %button;
+	font-size: 2em;
+}
+
+%red-big-button {
+	@extend %big-button;
+	color: red;
+}
+
+.button {
+	@extend %button;
+}
+
+.big-button {
+	@extend %big-button;
+}
+
+.red-big-button {
+	@extend %red-big-button;
+}
+
+.red-big-button-rounded {
+	@extend %red-big-button;
+	border-radius: 8px;
+}

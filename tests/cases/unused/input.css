@@ -2,8 +2,8 @@
 	display: block;
 }
 
-%unused {
-	color: yellow;
+%display-inline-block {
+	display: inline-block;
 }
 
 .is-block {

@@ -1,0 +1,13 @@
+%button {
+	display: inline-block;
+	color: blue;
+}
+%big-font {
+	font-family: Arial;
+	font-size: 5em;
+	letter-spacing: -0.03em;
+}
+.big-button {
+	@extend %button;
+	@extend %big-font;
+}

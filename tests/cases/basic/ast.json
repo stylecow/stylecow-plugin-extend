@@ -12,7 +12,7 @@
               "children": [
                 {
                   "class": "ClassSelector",
-                  "name": "is-block"
+                  "name": "button"
                 }
               ]
             },
@@ -21,7 +21,7 @@
               "children": [
                 {
                   "class": "ClassSelector",
-                  "name": "is-red-block"
+                  "name": "button-red"
                 }
               ]
             }
@@ -62,7 +62,7 @@
               "children": [
                 {
                   "class": "ClassSelector",
-                  "name": "is-red-block"
+                  "name": "button-red"
                 }
               ]
             }

@@ -1,0 +1,12 @@
+%button {
+	display: block;
+}
+
+.button {
+	@extend %button;
+}
+
+.button-red {
+	@extend %button;
+	color: red;
+}

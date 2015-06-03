@@ -1,5 +1,6 @@
 %button {
 	color: var(--color, blue);
+	background: var(--bgcolor, white);
 }
 
 .button {
@@ -8,5 +9,12 @@
 
 .button-2 {
 	--color: red;
+	--bgcolor: black;
 	@extend %button;
+}
+
+.button-3 {
+	--type: Arial;
+	@extend %button;
+	font-family: var(--type);
 }

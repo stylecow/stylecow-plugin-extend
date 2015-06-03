@@ -1,0 +1,13 @@
+.red-big-button, .red-big-button-rounded, .big-button, .button {
+	display: inline-block;
+	padding: 1em;
+}
+.red-big-button, .red-big-button-rounded, .big-button {
+	font-size: 2em;
+}
+.red-big-button, .red-big-button-rounded {
+	color: red;
+}
+.red-big-button-rounded {
+	border-radius: 8px;
+}

@@ -1,0 +1,12 @@
+.button, .button-red {
+	display: block;
+}
+.button > span, .button-red > span {
+	opacity: 0.5;
+}
+p .button, p .button-red {
+	margin: 2em 0;
+}
+.button-red {
+	color: red;
+}

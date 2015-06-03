@@ -1,0 +1,6 @@
+.button, .button-red {
+	display: block;
+}
+.button-red {
+	color: red;
+}

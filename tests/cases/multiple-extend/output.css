@@ -1,0 +1,9 @@
+.big-button {
+	display: inline-block;
+	color: blue;
+}
+.big-button {
+	font-family: Arial;
+	font-size: 5em;
+	letter-spacing: -0.03em;
+}

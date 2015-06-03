@@ -1,4 +1,6 @@
-%button, %button > a, p > %button {
+%button,
+%button > a,
+p > %button {
 	display: inline-block;
 	color: blue;
 }
@@ -7,7 +9,8 @@
 	@extend %button;
 }
 
-.button-2, .button-3 {
+.button-2,
+.button-3 {
 	@extend %button;
 	color: red;
 }
