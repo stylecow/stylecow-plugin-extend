@@ -1,4 +1,7 @@
-# stylecow plugin extend
+stylecow plugin extend
+======================
+
+[![Build Status](https://travis-ci.org/stylecow/stylecow-plugin-extend.svg)](https://travis-ci.org/stylecow/stylecow-plugin-extend)
 
 Stylecow plugin to work with @extend using the [syntax proposed by Tab Atkins](http://tabatkins.github.io/specs/css-extend-rule/#placeholder-selector).
 

@@ -1,0 +1,18 @@
+article.grid > div, ul.grid {
+	display: flex;
+	flex-wrap: wrap;
+}
+article.grid > div {
+	width: 50%;
+}
+ul.grid {
+	margin: initial;
+	transform: scale(1.1, 2);
+	transition: transform 2s;
+}
+ul.grid::before {
+	content: "hi \"you\"";
+}
+article.grid > div {
+	margin: 0 auto;
+}
