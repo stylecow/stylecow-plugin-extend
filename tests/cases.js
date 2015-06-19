@@ -1,9 +1,9 @@
 var assert = require('assert');
-var stylecow = require('stylecow');
+var stylecow = require('stylecow-core');
 
 stylecow
 	.loadNpmModule(__dirname + '/../index')
-	.loadPlugin('nested-rules')
+	.loadNpmModule('stylecow-plugin-nested-rules')
 	.minSupport({
 		"explorer": 0,
 		"firefox": 0,

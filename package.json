@@ -1,7 +1,7 @@
 {
   "name": "stylecow-plugin-extend",
   "description": "Stylecow plugin to work with @extend at-rules",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "author": "Oscar Otero <oom@oscarotero.com>",
   "homepage": "https://github.com/stylecow/stylecow-plugin-extend",
   "bugs": "https://github.com/stylecow/stylecow-plugin-extend/issues",
@@ -11,7 +11,8 @@
   },
   "devDependencies": {
     "mocha": "^2.2.5",
-    "stylecow": "6.*"
+    "stylecow-core": "^1.0.1",
+    "stylecow-plugin-nested-rules": "^4.2.0"
   },
   "scripts": {
     "test": "mocha tests/cases.js"
