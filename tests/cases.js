@@ -16,7 +16,6 @@ stylecow
 	.testCases(__dirname + '/cases', function (test) {
 		stylecow.run(test.css);
 
-
 		describe('cases/' + test.name, function() {
 			it('should match output.css', function() {
 				//test.write('output.css', test.css.toString());

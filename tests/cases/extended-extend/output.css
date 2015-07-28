@@ -1,8 +1,8 @@
-.red-big-button, .red-big-button-rounded, .big-button, .button {
+.button, .red-big-button, .red-big-button-rounded, .big-button {
 	display: inline-block;
 	padding: 1em;
 }
-.red-big-button, .red-big-button-rounded, .big-button {
+.big-button, .red-big-button, .red-big-button-rounded {
 	font-size: 2em;
 }
 .red-big-button, .red-big-button-rounded {

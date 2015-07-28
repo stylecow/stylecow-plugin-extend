@@ -1,4 +1,4 @@
-article.grid > div, ul.grid {
+ul.grid, article.grid > div {
 	display: flex;
 	flex-wrap: wrap;
 }

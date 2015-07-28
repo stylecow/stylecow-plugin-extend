@@ -13,49 +13,34 @@ module.exports = function (stylecow) {
 					type: 'PlaceholderSelector'
 				})
 				.forEach(function (placeholder) {
-					var type = 'uses';
+					var selector = placeholder.getParent('Selector');
+					var atRule = placeholder.getParent({type: 'AtRule', name: 'extend'});
 
-					var parent = placeholder.getParent({
-						type: 'AtRule',
-						name: 'extend'
-					});
-
-					if (!parent) {
-						parent = placeholder.getParent('Selector');
-						type = 'defs'
+					//in a selector
+					if (!atRule) {
+						return addIndex(index, placeholder.name, 'defs', selector);
 					}
 
-					if (!index[placeholder.name]) {
-						index[placeholder.name] = {
-							defs: [],
-							uses: [],
-							exts: [],
-							has: []
-						};
-					}
-
+					//in @extend
 					var add = true;
 
-					if (type === 'uses') {
-						placeholder
-							.getParent('Rule')
-							.getChild('Selectors')
-							.getAll('PlaceholderSelector')
-							.forEach(function (extend) {
-								var exts = index[extend.name].exts;
+					placeholder
+						.getParent('Rule')
+						.getChild('Selectors')
+						.forEach(function (s) {
+							var p = s.get('PlaceholderSelector');
+
+							if (p) {
+								s.data.extend = s.data.extend || [];
+								s.data.extend.push(placeholder.name);
 								add = false;
-
-								if (exts.indexOf(placeholder.name) === -1) {
-									exts.push(placeholder.name);
-								}
-							});
-
-					}
+							}
+						});
 
 					if (add) {
-						index[placeholder.name][type].push(parent);
+						addIndex(index, placeholder.name, 'uses', selector);
 					} else {
-						removeUsed(parent);
+						atRule.detach();
 					}
 				});
 
@@ -63,38 +48,60 @@ module.exports = function (stylecow) {
 
 			//Resolve extensions
 			for (name in index) {
-				index[name].exts.forEach(function (ext) {
-					resolveSubExtends(index, name, ext);
+				index[name].defs.forEach(function (selector) {
+					if (!selector.data.extend) {
+						return;
+					}
+
+					selector.data.extend.forEach(function (placeholderName) {
+						resolveSubExtends(index, name, selector, placeholderName);
+					});
 				});
 			}
 
 			//Resolve
 			for (name in index) {
 				each = index[name];
+				var defs = each.defs.concat(each.defs2);
+				var uses = each.uses;
 				var d = 0;
 				var u = 0;
-				var dt = each.defs.length;
-				var ut = each.uses.length;
+				var dt = defs.length;
+				var ut = uses.length;
+
 
 				//Resolve
 				if (ut && dt) {
 					for (d = 0; d < dt; d++) {
 						for (u = 0; u < ut; u++) {
-							resolve(each.defs[d], each.uses[u]);
+							resolve(defs[d], uses[u]);
 						}
 					}
 				}
 
 				for (d = 0; d < dt; d++) {
-					removeDefined(each.defs[d]);
+					removeDefined(defs[d]);
 				}
 
 				for (u = 0; u < ut; u++) {
-					removeUsed(each.uses[u]);
+					removeUsed(uses[u]);
 				}
 			}
 		}
 	});
+
+	//adds an element to the index
+	function addIndex(index, name, key, element) {
+		if (!index[name]) {
+			index[name] = {
+				defs: [],
+				defs2: [],
+				uses: []
+			};
+		}
+
+		index[name][key].push(element);
+	}
 
 	//resolve @extend with placeholders
 	function resolve (def, use) {
@@ -119,55 +126,44 @@ module.exports = function (stylecow) {
 
 
 	//resolve placeholders extending other placeholders
-	function resolveSubExtends (index, name, extName) {
-		if (index[name].has.indexOf(extName) !== -1) {
+	function resolveSubExtends (index, name, h3Selector, h2Name) {
+		//collo os selectores de h2
+		var h2 = index[h2Name];
+
+		if (!h2) {
 			return;
 		}
 
-		var element = index[name];
+		//e cada selector h2
+		h2.defs.forEach(function (h2Selector) {
+			//clono o selector
+			var clone = h2Selector.cloneAfter();
 
-		var add = [];
+			//collo o placeholder
+			var h2Placeholder = clone.get('PlaceholderSelector');
 
-		index[extName].defs.forEach(function (parentDef) {
-			element.defs.forEach(function (def) {
-				var _parentDefSelector = parentDef.cloneBefore();
-				var _parentDef = _parentDefSelector.get({
-						type: 'PlaceholderSelector',
-						name: extName
-					});
-
-				def.forEach(function (child) {
-					_parentDef.before(child.clone());
-				});
-
-
-				add.push(_parentDefSelector);
-
-				_parentDef.detach();
+			//remplazo os placeholders
+			h3Selector.forEach(function (child) {
+				h2Placeholder.before(child.clone());
 			});
-		});
+		
+			h2Placeholder.detach();
+			addIndex(index, name, 'defs2', clone);
 
-		add.forEach(function (item) {
-			index[name].defs.push(item);
+			//facelo recursivamente
+			if (h2Selector.data.extend) {
+				h2Selector.data.extend.forEach(function (h1Name) {
+					resolveSubExtends(index, name, clone, h1Name);
+				});
+			}
 		});
-
-		propagate(index, name, extName);
 	};
-
-	//propagate placeholders with other @extend
-	function propagate (index, name, extName) {
-		index[name].has.push(extName);
-
-		index[extName].has.forEach(function (subExtName) {
-			propagate(index, name, subExtName);
-		});
-	}
 
 	//remove @extend at-rules once they are resolved
 	function removeUsed (used) {
 		var block = used.getParent('Block');
 
-		used.detach();
+		used.getParent('AtRule').detach();
 
 		//remove if it's empty
 		if (!block.length) {

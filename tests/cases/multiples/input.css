@@ -1,0 +1,36 @@
+%h1 {
+    has: h1;
+}
+
+%h2 {
+    @extend %h1;
+    has: h2;
+}
+
+%h3 {
+    @extend %h2;
+    has: h3;
+}
+
+%h4a, %h4b {
+    @extend %h3;
+    has: h4;
+}
+
+%h4a {
+    has: h4a;
+}
+
+%h4b {
+    has: h4b;
+}
+
+%h5 {
+    @extend %h4a;
+    @extend %h4b;
+}
+
+
+.h5 {
+    @extend %h5;
+}

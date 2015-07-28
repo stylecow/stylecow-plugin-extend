@@ -12,6 +12,19 @@
               "children": [
                 {
                   "class": "TypeSelector",
+                  "name": "ul"
+                },
+                {
+                  "class": "ClassSelector",
+                  "name": "grid"
+                }
+              ]
+            },
+            {
+              "class": "Selector",
+              "children": [
+                {
+                  "class": "TypeSelector",
                   "name": "article"
                 },
                 {
@@ -25,19 +38,6 @@
                 {
                   "class": "TypeSelector",
                   "name": "div"
-                }
-              ]
-            },
-            {
-              "class": "Selector",
-              "children": [
-                {
-                  "class": "TypeSelector",
-                  "name": "ul"
-                },
-                {
-                  "class": "ClassSelector",
-                  "name": "grid"
                 }
               ]
             }
