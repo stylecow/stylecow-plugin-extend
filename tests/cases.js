@@ -2,8 +2,8 @@ var stylecow = require('stylecow-core');
 
 var tests = new stylecow.Test(__dirname + '/cases');
 var tasks = (new stylecow.Tasks())
-	.use(require('../index'))
-	.use(require('stylecow-plugin-nested-rules'));
+    .use(require('../index'))
+    .use(require('stylecow-plugin-nested-rules'));
 
 tests.run(function (test) {
     tasks.run(test.css);

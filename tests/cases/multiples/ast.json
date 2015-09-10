@@ -15,6 +15,15 @@
                   "name": "h5"
                 }
               ]
+            },
+            {
+              "type": "Selector",
+              "children": [
+                {
+                  "type": "ClassSelector",
+                  "name": "h5"
+                }
+              ]
             }
           ]
         },
@@ -48,6 +57,15 @@
         {
           "type": "Selectors",
           "children": [
+            {
+              "type": "Selector",
+              "children": [
+                {
+                  "type": "ClassSelector",
+                  "name": "h5"
+                }
+              ]
+            },
             {
               "type": "Selector",
               "children": [
@@ -97,6 +115,15 @@
                   "name": "h5"
                 }
               ]
+            },
+            {
+              "type": "Selector",
+              "children": [
+                {
+                  "type": "ClassSelector",
+                  "name": "h5"
+                }
+              ]
             }
           ]
         },
@@ -130,6 +157,15 @@
         {
           "type": "Selectors",
           "children": [
+            {
+              "type": "Selector",
+              "children": [
+                {
+                  "type": "ClassSelector",
+                  "name": "h5"
+                }
+              ]
+            },
             {
               "type": "Selector",
               "children": [
@@ -227,21 +263,46 @@
           "type": "Block",
           "children": [
             {
-              "type": "AtRule",
-              "name": "extend",
+              "type": "Declaration",
+              "name": "has",
+              "vendor": null,
               "children": [
                 {
-                  "type": "Selector",
+                  "type": "Value",
                   "children": [
                     {
-                      "type": "PlaceholderSelector",
-                      "name": "h4b"
+                      "type": "Keyword",
+                      "name": "h4b",
+                      "vendor": null
                     }
                   ]
                 }
               ]
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "Rule",
+      "children": [
+        {
+          "type": "Selectors",
+          "children": [
+            {
+              "type": "Selector",
+              "children": [
+                {
+                  "type": "ClassSelector",
+                  "name": "h5"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Block",
+          "children": []
         }
       ]
     }
