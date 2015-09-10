@@ -1,53 +1,47 @@
-module.exports = function (stylecow) {
+"use strict";
 
-	stylecow.addTask({
-		filter: {
-			type: 'Root'
-		},
+module.exports = function (tasks) {
+
+	tasks.addTask({
+		filter: 'Root',
 		fn: function (root) {
 			//Save all placeholderselectors
 			var index = {};
 
-			root
-				.getAll({
-					type: 'PlaceholderSelector'
-				})
-				.forEach(function (placeholder) {
-					var selector = placeholder.getParent('Selector');
-					var atRule = placeholder.getParent({type: 'AtRule', name: 'extend'});
+			root.walk('PlaceholderSelector', function (placeholder) {
+				var selector = placeholder.getAncestor('Selector'),
+					atRule   = placeholder.getAncestor({type: 'AtRule', name: 'extend'});
 
-					//in a selector
-					if (!atRule) {
-						return addIndex(index, placeholder.name, 'defs', selector);
-					}
+				//is in a selector
+				if (!atRule) {
+					return addIndex(index, placeholder.name, 'defs', selector);
+				}
 
-					//in @extend
-					var add = true;
+				//is in a @extend
+				var add = true;
 
-					placeholder
-						.getParent('Rule')
-						.getChild('Selectors')
-						.forEach(function (s) {
-							var p = s.get('PlaceholderSelector');
+				placeholder
+					.getAncestor('Rule')
+					.getChild('Selectors')
+					.forEach(function (s) {
+						var p = s.get('PlaceholderSelector');
 
-							if (p) {
-								s.data.extend = s.data.extend || [];
-								s.data.extend.push(placeholder.name);
-								add = false;
-							}
-						});
+						if (p) {
+							s.data.extend = s.data.extend || [];
+							s.data.extend.push(placeholder.name);
+							add = false;
+						}
+					});
 
-					if (add) {
-						addIndex(index, placeholder.name, 'uses', selector);
-					} else {
-						atRule.detach();
-					}
-				});
-
-			var name, each;
+				if (add) {
+					addIndex(index, placeholder.name, 'uses', selector);
+				} else {
+					atRule.detach();
+				}
+			});
 
 			//Resolve extensions
-			for (name in index) {
+			for (let name in index) {
 				index[name].defs.forEach(function (selector) {
 					if (!selector.data.extend) {
 						return;
@@ -60,15 +54,14 @@ module.exports = function (stylecow) {
 			}
 
 			//Resolve
-			for (name in index) {
-				each = index[name];
-				var defs = each.defs.concat(each.defs2);
-				var uses = each.uses;
-				var d = 0;
-				var u = 0;
-				var dt = defs.length;
-				var ut = uses.length;
-
+			for (let name in index) {
+				let each = index[name],
+					defs = each.defs.concat(each.defs2),
+					uses = each.uses,
+					d    = 0,
+					u    = 0,
+					dt   = defs.length,
+					ut   = uses.length;
 
 				//Resolve
 				if (ut && dt) {
@@ -106,7 +99,7 @@ module.exports = function (stylecow) {
 	//resolve @extend with placeholders
 	function resolve (def, use) {
 		use
-			.getParent('Rule')
+			.getAncestor('Rule')
 			.getChild('Selectors')
 			.forEach(function (useSelector) {
 				var placeholder = def
@@ -161,9 +154,9 @@ module.exports = function (stylecow) {
 
 	//remove @extend at-rules once they are resolved
 	function removeUsed (used) {
-		var block = used.getParent('Block');
+		var block = used.getAncestor('Block');
 
-		used.getParent('AtRule').detach();
+		used.getAncestor('AtRule').detach();
 
 		//remove if it's empty
 		if (!block.length) {
